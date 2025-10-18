@@ -19,6 +19,10 @@ target/
 *.iml
 *.ipr
 
+# Ignore application config files
+/MeetingRoom-Management/src/main/resources/application-dev.yml
+/MeetingRoom-Management/src/main/resources/application.yml
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
