@@ -1,6 +1,6 @@
 server:
   port: 8080
-
+  address: 0.0.0.0
 spring:
   #为了加载dev文件
   profiles:
@@ -22,7 +22,18 @@ spring:
     host: ${sky.redis.host}
     port: ${sky.redis.port}
     database: ${sky.redis.database}
-
+  mail:
+    host: smtp.qq.com  # 邮件服务器地址（QQ邮箱为smtp.qq.com，163为smtp.163.com）
+    port: 587           # 端口（TLS加密通常用587，SSL用465）
+    username: 2281613734@qq.com  # 发送邮件的邮箱账号
+    password: jbbhamiiekeweafc    # 邮箱授权码（非登录密码，需在邮箱设置中开启SMTP并获取）
+    properties:
+      mail:
+        smtp:
+          auth: true     # 启用认证
+          starttls:
+            enable: true # 启用TLS加密
+        debug: true
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
@@ -42,13 +53,13 @@ logging:
 sky:
   jwt:
     # 设置jwt签名加密时使用的秘钥
-    admin-secret-key: itcast
+    admin-secret-key: fydkd
     # 设置jwt过期时间
     admin-ttl: 7200000000000000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
 
-    user-secret-key: itheima
+    user-secret-key: fydkd
     user-token-name: authentication
     user-ttl: 72000000000000000
 
