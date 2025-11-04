@@ -18,6 +18,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 100MB
+  cache:
+    redis:
+      time-to-live: 3600000
   redis:
     host: ${sky.redis.host}
     port: ${sky.redis.port}

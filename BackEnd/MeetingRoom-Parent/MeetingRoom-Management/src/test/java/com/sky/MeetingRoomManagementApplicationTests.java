@@ -9,7 +9,7 @@ class MeetingRoomManagementApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(DigestUtils.md5DigestAsHex("admin123".getBytes()));
+
     }
 
 }
