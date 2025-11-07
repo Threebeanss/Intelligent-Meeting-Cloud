@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.Mapper.ReservationMapper">
+    <resultMap id="ReservationVO" type="com.sky.vo.ReservationVo">
+        <id property="id" column="id"/>
+        <result property="reservationNo" column="reservation_no"/>
+        <result property="roomId" column="room_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="status" column="status"/>
+        <result property="meetingTopic" column="meeting_topic"/>
+        <result property="participantNum" column="participant_num"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remark" column="remark"/>
+        <association property="userName" javaType="string" column="user_id" select="com.sky.Mapper.UserMapper.getById"/>
+        <association property="adminName" javaType="string" column="admin_id" select="com.sky.Mapper.UserMapper.getById"/>
+    </resultMap>
+
+    <insert id="insertReservation">
+        insert into reservation(reservation_no,user_id,room_id,admin_id,
+                                start_time,end_time,status,meeting_topic,
+                                participant_num,create_time,update_time,
+                                create_by,update_by,remark)
+        values( #{reservationNo},#{userId},#{roomId},#{adminId},
+               #{startTime},#{endTime},#{status},#{meetingTopic},
+               #{participantNum},#{createTime},#{updateTime},
+               #{createBy},#{updateBy},#{remark})
+    </insert>
+    <update id="update">
+        update reservation
+        <set>
+            <if test="reservationNo != null">
+                reservation_no = #{reservationNo},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="roomId != null">
+                room_id = #{roomId},
+            </if>
+            <if test="adminId != null">
+                admin_id = #{adminId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="meetingTopic != null">
+                meeting_topic = #{meetingTopic},
+            </if>
+            <if test="participantNum != null">
+                participant_num = #{participantNum},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+    <select id="pageSelect" resultMap="ReservationVO">
+        SELECT * FROM reservation
+        <where>
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY create_time DESC
+        </where>
+    </select>
+
+
+</mapper>

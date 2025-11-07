@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sky.Mapper.PermissionMapper">
+
+    <select id="selectByRoleIds" resultType="com.sky.entity.RolePermission">
+        SELECT id, role_id, permission_id
+        FROM role_permission
+        WHERE role_id IN
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </select>
+    <select id="selectByIds" resultType="com.sky.entity.Permission">
+        SELECT id, permission_code, permission_name, url, method, parent_id
+        FROM permission
+        WHERE id IN
+        <foreach collection="permissionIds" item="permId" open="(" separator="," close=")">
+            #{permId}
+        </foreach>
+    </select>
+    <select id="selectByRoleId" resultType="com.sky.entity.Permission">
+        SELECT p.id, p.permission_code, p.permission_name
+        FROM permission p
+                 INNER JOIN role_permission rp ON p.id = rp.permission_id
+        WHERE rp.role_id = #{roleId}
+    </select>
+
+</mapper>

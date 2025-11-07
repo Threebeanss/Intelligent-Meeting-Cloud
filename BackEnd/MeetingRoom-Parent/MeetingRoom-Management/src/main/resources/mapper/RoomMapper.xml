@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.Mapper.RoomMapper">
+    <!--添加会议室-->
+    <insert id="insertRoom" parameterType="com.sky.entity.MeetingRoom">
+        INSERT INTO meeting_room
+        (room_code, capacity, status, is_active, location, equipment, create_time, update_time, create_by, update_by, remark)
+        VALUES
+            (#{roomCode} ,#{capacity}, #{status}, #{isActive}, #{location},#{equipment}, #{createTime}, #{updateTime}, #{createBy}, #{updateBy}, #{remark})
+    </insert>
+
+
+    <update id="update">
+        UPDATE meeting_room
+        <set>
+            <if test="roomCode != null">
+                room_code = #{roomCode},
+            </if>
+            <if test="capacity != null">
+                capacity = #{capacity},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="isActive != null">
+                is_active = #{isActive},
+            </if>
+            <if test="location != null and location != ''">
+                location = #{location},
+            </if>
+            <if test="equipment != null and equipment != ''">
+                equipment = #{equipment},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateStatusWithVersion">
+        UPDATE meeting_room
+        SET status = #{status}, version = version + 1
+        WHERE id = #{roomId} AND version = #{version}
+    </update>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM meeting_room
+        WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="limitSelect" resultType="com.sky.vo.RoomVo">
+        SELECT id, room_code, capacity, status, is_active, equipment, location, remark
+        FROM meeting_room
+        <where>
+        <if test="roomCode != null">
+            room_code = #{roomCode}
+        </if>
+        <if test="capacity != null">
+            and capacity >= #{capacity}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="isActive != null">
+            AND is_active = #{isActive}
+        </if>
+        <if test="location != null and location != ''">
+            AND location LIKE CONCAT('%', #{location}, '%')
+        </if>
+
+        </where>
+    </select>
+</mapper>

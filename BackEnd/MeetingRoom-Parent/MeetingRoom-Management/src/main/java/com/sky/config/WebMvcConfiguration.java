@@ -17,6 +17,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
  */
 @Configuration
 @Slf4j
+@EnableSwagger2
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
 
@@ -40,7 +42,16 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         log.info("开始注册自定义拦截器...");
         registry.addInterceptor(jwtTokenUserInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login");
+                .excludePathPatterns(
+                        "/user/login",
+                        "/doc.html",
+                        "/webjars/**",
+                        "/swagger-resources/**",
+                        "/v2/api-docs",
+                        "/v2/api-docs-ext",
+                        "/swagger-ui.html",
+                        "/swagger-resources/configuration/ui",
+                        "/swagger-resources/configuration/security");
 
     }
     /**
@@ -58,12 +69,13 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.Controller"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;
     }
-    @Bean
+
+    /*@Bean
     public Docket docket2() {
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("智能会议室接口文档")
@@ -78,7 +90,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .paths(PathSelectors.any())
                 .build();
         return docket;
-    }
+    }*/
 
     /**
      * 设置静态资源映射
@@ -86,6 +98,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static/");
+
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 

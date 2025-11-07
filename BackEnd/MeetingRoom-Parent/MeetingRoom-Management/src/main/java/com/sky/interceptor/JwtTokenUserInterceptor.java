@@ -34,6 +34,16 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 获取请求路径
+        String requestURI = request.getRequestURI();
+
+        // 如果是 Swagger 相关路径，直接放行
+        if (requestURI.startsWith("/swagger-") ||
+                requestURI.startsWith("/v2/") ||
+                "/doc.html".equals(requestURI) ||
+                requestURI.startsWith("/webjars/")) {
+            return true;
+        }
         //判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
             //当前拦截到的不是动态方法，直接放行
