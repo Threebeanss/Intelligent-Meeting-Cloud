@@ -41,11 +41,15 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/user/login").permitAll()
                 // 添加以下Swagger相关路径的放行规则
-                .antMatchers("/swagger-ui/**",
-                        "/swagger-resources/**",
-                        "/v2/api-docs",
-                        "/v3/api-docs",
-                        "/webjars/**").permitAll()
+                .antMatchers( "/doc.html",                  // knife4j的UI路径
+                        "/swagger-ui.html",           // Swagger2默认UI路径
+                        "/swagger-ui/**",             // Swagger3的UI资源路径
+                        "/webjars/**",                // 第三方UI依赖资源
+                        "/swagger-resources/**",      // Swagger的资源配置
+                        "/v2/api-docs",               // Swagger2的接口文档
+                        "/v2/api-docs-ext",           // 扩展接口文档
+                        "/v3/api-docs",               // Swagger3的接口文档
+                        "/v3/api-docs/**").permitAll()             // Swagger3的接口文档资源).permitAll()
                 .anyRequest().authenticated();
 
         return http.build();

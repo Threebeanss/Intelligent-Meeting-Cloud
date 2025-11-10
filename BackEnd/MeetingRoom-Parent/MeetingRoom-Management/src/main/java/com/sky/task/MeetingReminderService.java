@@ -2,6 +2,7 @@ package com.sky.task;
 
 import com.sky.Service.ReservationService;
 import com.sky.Service.UserService;
+import com.sky.context.BaseContext;
 import com.sky.entity.Reservation;
 import com.sky.entity.User;
 import com.sky.Mapper.ReservationMapper;
@@ -60,11 +61,12 @@ public class MeetingReminderService {
 
     /**
      * 发送会议提醒邮件
-     * @param reservation 会议预约信息
+     *
      */
-    private void sendReminderEmail(Reservation reservation) {
+    public  void sendReminderEmail(Reservation reservation) {
+
         // 获取用户信息
-        User user = userMapper.getById(reservation.getUserId());
+        User user = userMapper.getById(BaseContext.getCurrentId());
 
         if (user == null || user.getEmail() == null || user.getEmail().isEmpty()) {
             log.warn("用户邮箱信息不完整，无法发送邮件，用户ID: {}", reservation.getUserId());

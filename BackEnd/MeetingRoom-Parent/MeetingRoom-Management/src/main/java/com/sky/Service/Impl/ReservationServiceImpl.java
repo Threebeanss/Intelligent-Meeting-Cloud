@@ -5,19 +5,25 @@ import com.github.pagehelper.PageHelper;
 import com.sky.Mapper.ReservationMapper;
 import com.sky.Service.ReservationService;
 import com.sky.Service.RoomService;
+import com.sky.Service.UserService;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.ReservationPageDto;
 import com.sky.entity.MeetingRoom;
 import com.sky.entity.Reservation;
+import com.sky.entity.User;
 import com.sky.exception.EndTimeBeforeStartTime;
+import com.sky.exception.ReservationIsConfirmed;
 import com.sky.exception.RoomIsAccupied;
 import com.sky.result.PageResult;
 import com.sky.vo.ReservationVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,11 +34,16 @@ public class ReservationServiceImpl implements ReservationService{
     private ReservationMapper reservationMapper;
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private UserService userService;
     /**
      * 添加预约
      * @param reservation
      * @return
      */
+    @Transactional
     @Override
     public int addReservation(Reservation reservation) {
         log.info("添加预约：{}",reservation);
@@ -67,7 +78,47 @@ public class ReservationServiceImpl implements ReservationService{
             // 版本号不匹配，说明已被其他用户修改
             throw new RuntimeException("会议室状态已被其他用户修改，请重新预约");
         }
-        return reservationMapper.insertReservation(reservation);
+
+        int result = reservationMapper.insertReservation(reservation);
+
+        // 如果预约添加成功，则发送邮件提醒
+        if (result > 0) {
+            sendReservationSuccessEmail(reservation);
+        }
+
+        return result;
+    }
+    /**
+     * 发送预约成功邮件
+     * @param reservation
+     */
+    private void sendReservationSuccessEmail(Reservation reservation) {
+        try {
+
+        User user = userService.getById(reservation.getUserId()); // 需要注入UserService或UserMapper
+
+        if (user != null && user.getEmail() != null && !user.getEmail().isEmpty()) {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(user.getEmail());
+            message.setSubject("会议室预约成功通知");
+            message.setText(
+                "您好，\n\n" +
+                "您的会议室预约已成功提交：\n" +
+                "会议主题: " + reservation.getMeetingTopic() + "\n" +
+                "会议室ID: " + reservation.getRoomId() + "\n" +
+                "开始时间: " + reservation.getStartTime() + "\n" +
+                "结束时间: " + reservation.getEndTime() + "\n" +
+                "当前状态: 待审核\n\n" +
+                "请耐心等待管理员审核。\n\n" +
+                "智能会议室系统"
+            );
+
+            mailSender.send(message);
+            log.info("预约成功邮件已发送至: {}", user.getEmail());
+        }
+        } catch (Exception e) {
+            log.error("发送预约成功邮件失败，预约ID: {}", reservation.getId(), e);
+        }
     }
 
     /**
@@ -105,10 +156,36 @@ public class ReservationServiceImpl implements ReservationService{
         return reservationMapper.selectByRoomId(id);
     }
 
+    /**
+     * 获取当前用户预约信息
+     * @return
+     */
     @Override
     public List<Reservation> getMyReservation() {
         log.info("获取当前用户预约信息");
         Integer userId = BaseContext.getCurrentId();
         return  reservationMapper.getByUserId(userId);
+    }
+
+    /**
+     * 取消预约
+     * @param id
+     * @return
+     */
+    @Override
+    public int cancel(Integer id) {
+        log.info("取消预约");
+        Reservation reservation = reservationMapper.selectById(id);
+        if(reservation==null){
+            log.info("预约不存在");
+            throw new RuntimeException("预约不存在");
+        }
+        if(reservation.getStatus() == StatusConstant.CONFIRMED){
+            log.info("预约已确认，不能取消");
+            throw new ReservationIsConfirmed("预约已确认，不能取消");
+        }
+        reservation.setStatus(StatusConstant.CANCELED);
+        return reservationMapper.update(reservation);
+
     }
 }

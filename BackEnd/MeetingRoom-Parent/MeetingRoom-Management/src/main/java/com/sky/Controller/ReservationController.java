@@ -74,4 +74,16 @@ public class ReservationController {
         log.info("查询当前用户预约信息");
         return Result.success(reservationService.getMyReservation());
     }
+
+    /**
+     * 取消预约
+     * @param id
+     * @return
+     */
+    @PutMapping("/cancel/{id}")
+    public Result cancel(@PathVariable Integer id){
+        log.info("取消预约:{}",id);
+        return reservationService.cancel(id)>0?
+                Result.success():Result.error("取消预约失败");
+    }
 }

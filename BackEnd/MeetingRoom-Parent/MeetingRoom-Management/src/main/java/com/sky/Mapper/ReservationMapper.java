@@ -60,4 +60,12 @@ public interface ReservationMapper {
      */
     @Select("SELECT * FROM reservation WHERE user_id = #{userId}")
     List<Reservation> getByUserId(Integer userId);
+
+    /**
+     * 根据id查询预约信息
+     * @param id
+     * @return
+     */
+    @Select("SELECT * FROM reservation WHERE id = #{id}")
+    Reservation selectById(Integer id);
 }

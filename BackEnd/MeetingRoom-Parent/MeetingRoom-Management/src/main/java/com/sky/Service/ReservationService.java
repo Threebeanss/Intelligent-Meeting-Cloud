@@ -44,5 +44,11 @@ public interface ReservationService {
      * @return
      */
     List<Reservation> getMyReservation();
+    /**
+     * 取消预约
+     * @param id
+     * @return
+     */
 
+    int cancel(Integer id);
 }
