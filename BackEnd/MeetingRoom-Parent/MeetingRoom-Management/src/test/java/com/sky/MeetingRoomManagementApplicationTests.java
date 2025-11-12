@@ -2,14 +2,16 @@ package com.sky;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.DigestUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@SpringBootTest
+
+/*@SpringBootTest*/
 class MeetingRoomManagementApplicationTests {
 
     @Test
     void contextLoads() {
-
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        System.out.println(bCryptPasswordEncoder.encode("admin123"));
     }
 
 }

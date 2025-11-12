@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,10 +58,10 @@ public class UserServiceIml implements UserService {
         }
 
         //密码比对
-        //进行md5加密，然后再进行比对
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        //进行加密，然后再进行比对
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-        if (!password.equals(user.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             //密码错误
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
@@ -86,7 +87,9 @@ public class UserServiceIml implements UserService {
         User user1 = new User();
         BeanUtils.copyProperties(user,user1);
         user1.setIsActive(StatusConstant.ENABLE);
-        user1.setPassword(DigestUtils.md5DigestAsHex(user1.getPassword().getBytes()));
+        //密码进行加密
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user1.setPassword(bCryptPasswordEncoder.encode(user1.getPassword()));
         return userMapper.insertUser(user1);
     }
 

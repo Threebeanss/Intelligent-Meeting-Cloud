@@ -36,14 +36,17 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获取请求路径
         String requestURI = request.getRequestURI();
+        log.info("当前请求路径: {}", requestURI);
         // 在JwtTokenUserInterceptor的preHandle方法中，完善Swagger路径判断
+        // 豁免路径：Swagger
         if (requestURI.startsWith("/swagger-") ||
                 requestURI.startsWith("/v2/") ||
-                requestURI.startsWith("/v3/") ||  // 新增：Swagger3路径
+                requestURI.startsWith("/v3/") ||
                 "/doc.html".equals(requestURI) ||
-                "/swagger-ui.html".equals(requestURI) ||  // 新增：Swagger2默认UI
+                "/swagger-ui.html".equals(requestURI) ||
                 requestURI.startsWith("/webjars/") ||
-                requestURI.startsWith("/swagger-resources/")) {  // 新增：资源配置路径
+                requestURI.startsWith("/swagger-resources/")
+               ) {
             return true;
         }
 
