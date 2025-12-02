@@ -39,6 +39,13 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
         log.info("当前请求路径: {}", requestURI);
         // 在JwtTokenUserInterceptor的preHandle方法中，完善Swagger路径判断
         // 豁免路径：Swagger
+        // 排除登录、注册接口，不进行JWT校验
+        if (requestURI.equals("/login") || requestURI.equals("/register")) {
+            return true; // 直接放行
+        }
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true; // 直接通过
+        }
         if (requestURI.startsWith("/swagger-") ||
                 requestURI.startsWith("/v2/") ||
                 requestURI.startsWith("/v3/") ||

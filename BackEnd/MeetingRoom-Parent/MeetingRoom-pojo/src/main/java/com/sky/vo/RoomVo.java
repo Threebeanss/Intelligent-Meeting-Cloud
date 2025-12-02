@@ -15,4 +15,6 @@ public class RoomVo implements Serializable {
     private String location; // 会议室位置（如"3楼东区301室"）
     private String equipment;// 会议室设备
     private String remark; // 备注信息
+    //图片
+    private String image;
 }

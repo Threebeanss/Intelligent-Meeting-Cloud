@@ -22,4 +22,7 @@ public class User implements Serializable {
     private String createBy; // 创建人（登录账号）
     private String updateBy; // 修改人（登录账号）
     private String remark; // 备注信息
+    private Integer isAdmin;// 是否管理员（0-普通用户，1-管理员）
+    //图片
+    private String image;
 }

@@ -9,10 +9,10 @@ spring:
     allow-circular-references: true
   datasource:
     druid:
-      driver-class-name: ${sky.datasource.driver-class-name}
-      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${sky.datasource.username}
-      password: ${sky.datasource.password}
+      driver-class-name: ${room.datasource.driver-class-name}
+      url: jdbc:mysql://${room.datasource.host}:${room.datasource.port}/${room.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${room.datasource.username}
+      password: ${room.datasource.password}
   #文件上传的配置
   servlet:
     multipart:
@@ -22,14 +22,15 @@ spring:
     redis:
       time-to-live: 3600000
   redis:
-    host: ${sky.redis.host}
-    port: ${sky.redis.port}
-    database: ${sky.redis.database}
+    host: ${room.redis.host}
+    port: ${room.redis.port}
+    database: ${room.redis.database}
   mail:
     host: smtp.qq.com  # 邮件服务器地址（QQ邮箱为smtp.qq.com，163为smtp.163.com）
     port: 587           # 端口（TLS加密通常用587，SSL用465）
     username: 2281613734@qq.com  # 发送邮件的邮箱账号
-    password: jbbhamiiekeweafc    # 邮箱授权码（非登录密码，需在邮箱设置中开启SMTP并获取）
+    password: jbbhamiiekeweafc
+    default-encoding: UTF-8 # 邮箱授权码（非登录密码，需在邮箱设置中开启SMTP并获取）
     properties:
       mail:
         smtp:
@@ -50,13 +51,22 @@ logging:
     com:
       sky:
         mapper: debug
-        service: info
-        controller: info
+        service: debug
+        controller: debug
+        org.apache.ibatis.reflection: DEBUG
 
 sky:
   jwt:
     user-secret-key: fydkd
     user-token-name: token
     user-ttl: 864000000000
-
+    alioss:
+      access-key-id: ${sky.alioss.access-key-id}
+      endpoint: ${sky.alioss.endpoint}
+      access-key-secret: ${sky.alioss.access-key-secret}
+      bucket-name: ${sky.alioss.bucket-name}
+pagehelper:
+  helper-dialect: mysql # 对应你的数据库（如oracle、postgresql）
+  reasonable: true # 页码<=0时查第1页，页码>总页数时查最后1页
+  support-methods-arguments: true # 支持通过Mapper接口参数传递分页参数
 

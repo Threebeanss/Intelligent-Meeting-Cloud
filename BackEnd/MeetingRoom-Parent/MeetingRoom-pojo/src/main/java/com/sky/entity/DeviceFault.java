@@ -16,7 +16,7 @@ public class DeviceFault implements Serializable {
     private Integer roomId; // 关联会议室ID（外键）
     private Integer reportUserId; // 上报人ID（外键）
     private Integer handleUserId; // 处理人ID（外键，管理员）
-    private Integer status; // 状态（0-待处理，1-处理中，2-已修复）
+    private Integer status; // 状态（0-待处理，1-处理中，2-已修复，3-无法修复）
     private String faultDesc;// 故障描述
     private String handleDesc;// 处理描述
     private LocalDateTime createTime; // 创建时间

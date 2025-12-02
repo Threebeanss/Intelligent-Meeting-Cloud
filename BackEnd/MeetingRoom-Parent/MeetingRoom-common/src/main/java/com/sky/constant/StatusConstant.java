@@ -19,10 +19,19 @@ public class StatusConstant {
 
     //维修
     public static final Integer REPAIR = 2;
-    //待审核
-    public static final Integer PENDING = 0;
-    //已确认
-    public static final Integer CONFIRMED = 1;
-    //已取消
-    public static final Integer CANCELED = 2;
+
+    public static final Integer PENDING = 0;       // 待审核
+    public static final Integer CONFIRMED = 1;     // 已确认
+    public static final Integer CANCELED = 2;      // 已取消
+    public static final Integer REJECTED = 3;      // 已拒绝
+    public static final Integer COMPLETED1 = 4;     // 预约已完成
+    public static final Integer TIMEOUT = 5;       // 已超时
+    //待处理
+    public static final Integer WAITING = 0;
+    //处理中
+    public static final Integer PROCESSING = 1;
+    //已修复
+    public static final Integer COMPLETED2 = 2;
+    //无法修复
+    public static final Integer UNFIXABLE = 3;
 }

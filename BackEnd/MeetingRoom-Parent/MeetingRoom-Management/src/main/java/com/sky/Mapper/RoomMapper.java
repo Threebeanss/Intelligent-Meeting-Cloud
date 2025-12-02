@@ -32,7 +32,7 @@ public interface RoomMapper {
      * @param ids
      * @return
      */
-    int batchDelete(List<Long> ids);
+    int batchDelete(List<Integer> ids);
 
     /**
      * 修改会议室信息

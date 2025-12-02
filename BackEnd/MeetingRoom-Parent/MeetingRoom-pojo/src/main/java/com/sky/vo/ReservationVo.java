@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 public class ReservationVo implements Serializable {
     private Integer id; // 预约ID（主键）
     private String reservationNo;// 预约编号
-    private String userName; // 预约用户
+    private Integer userId; // 预约用户ID（外键）
     private Integer roomId; // 预约会议室ID（外键）
-    private String adminName; // 审核管理员
+    private Integer adminId; // 审核管理员
     private LocalDateTime startTime; // 预约开始时间
     private LocalDateTime endTime; // 预约结束时间
     private Integer status; // 预约状态（0-待审核，1-已确认，2-已取消）

@@ -7,6 +7,7 @@ import com.sky.entity.User;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -40,7 +41,7 @@ public interface UserMapper {
      * @param ids
      * @return
      */
-    int deleteByIds(List<Integer> ids);
+    int deleteByIds(@Param("ids") List<Integer> ids);
 
     /**
      * 修改用户信息
@@ -58,10 +59,10 @@ public interface UserMapper {
     User getById(Integer id);
 
     /**
-     * 根据登录账号查询用户
-     * @param loginAccount
+     *
+     * @param LoginAccount
      * @return
      */
-    @Select("select * from user where login_account = #{loginAccount}")
-    User selectByLoginAccount(String loginAccount);
+    @Select("select count(1) from user where login_account = #{LoginAccount}")
+    int countByUsername(String LoginAccount);
 }

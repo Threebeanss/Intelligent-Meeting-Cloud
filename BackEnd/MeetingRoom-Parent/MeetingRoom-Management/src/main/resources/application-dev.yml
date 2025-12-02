@@ -1,4 +1,4 @@
-sky:
+room:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: localhost
@@ -10,3 +10,10 @@ sky:
     host: localhost
     port: 6379
     database: 0
+
+sky:
+  alioss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    accessKeyId: LTAI5t9jZi4ReiaXpDNB4srr
+    accessKeySecret: xlgJdb8APPwYFSz0AVrEwqD5xlv6Eg
+    bucketName: web-fengyi-tlias
