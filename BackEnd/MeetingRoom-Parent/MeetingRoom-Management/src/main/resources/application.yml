@@ -1,18 +1,15 @@
 server:
-  port: 8080
+  port: 8081
   address: 0.0.0.0
 spring:
-  #为了加载dev文件
-  profiles:
-    active: dev
   main:
     allow-circular-references: true
   datasource:
     druid:
-      driver-class-name: ${room.datasource.driver-class-name}
-      url: jdbc:mysql://${room.datasource.host}:${room.datasource.port}/${room.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${room.datasource.username}
-      password: ${room.datasource.password}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://172.21.132.89:3306/meeting_room_db?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: a912812618
   #文件上传的配置
   servlet:
     multipart:
@@ -21,10 +18,11 @@ spring:
   cache:
     redis:
       time-to-live: 3600000
-  redis:
-    host: ${room.redis.host}
-    port: ${room.redis.port}
-    database: ${room.redis.database}
+  session:
+    cookie:
+      secure: true
+      same-site: lax
+
   mail:
     host: smtp.qq.com  # 邮件服务器地址（QQ邮箱为smtp.qq.com，163为smtp.163.com）
     port: 587           # 端口（TLS加密通常用587，SSL用465）
@@ -55,16 +53,17 @@ logging:
         controller: debug
         org.apache.ibatis.reflection: DEBUG
 
+
 sky:
   jwt:
     user-secret-key: fydkd
     user-token-name: token
     user-ttl: 864000000000
     alioss:
-      access-key-id: ${sky.alioss.access-key-id}
-      endpoint: ${sky.alioss.endpoint}
-      access-key-secret: ${sky.alioss.access-key-secret}
-      bucket-name: ${sky.alioss.bucket-name}
+      access-key-id: LTAI5t9jZi4ReiaXpDNB4srr
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      access-key-secret: xlgJdb8APPwYFSz0AVrEwqD5xlv6Eg
+      bucket-name: web-fengyi-tlias
 pagehelper:
   helper-dialect: mysql # 对应你的数据库（如oracle、postgresql）
   reasonable: true # 页码<=0时查第1页，页码>总页数时查最后1页
